@@ -25,18 +25,17 @@ namespace _301289600Van_Lab1
             s3Client = client;
         }
 
-        public async Task<List<string>> GetBucketListAsync()
+        public async Task<List<string>> GetBucketNamesAsync()
         {
             var response = await s3Client.ListBucketsAsync();
-            var bucketInfoList = new List<string>();
-
+            var names = new List<string>();
             foreach (var bucket in response.Buckets)
             {
-                bucketInfoList.Add($"{bucket.BucketName} ({bucket.CreationDate.ToShortDateString()})");
+                names.Add(bucket.BucketName);
             }
-
-            return bucketInfoList;
+            return names;
         }
+
 
         public async Task<string> CreateBucketAsync(string bucketName)
         {
@@ -59,6 +58,21 @@ namespace _301289600Van_Lab1
             catch (Exception ex)
             {
                 return $"General Error: {ex.Message}";
+            }
+        }
+
+        public async Task ListObjectsAsync(string bucketName)
+        {
+            var request = new ListObjectsV2Request
+            {
+                BucketName = bucketName
+            };
+
+            var response = await s3Client.ListObjectsV2Async(request);
+            Console.WriteLine($"Objects in bucket '{bucketName}':");
+            foreach (var obj in response.S3Objects)
+            {
+                Console.WriteLine($"- {obj.Key} (Size: {obj.Size} bytes)");
             }
         }
     }

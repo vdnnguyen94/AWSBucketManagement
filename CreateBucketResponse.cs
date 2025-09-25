@@ -8,7 +8,8 @@ namespace _301289600Van_Lab1
 {
     public class CreateBucketResponse
     {
-        public string RequestId { get; set; }
-        public string BucketName { get; set; }
+        public string? RequestId { get; set; }
+        public string? BucketName { get; set; }
+
     }
 }

@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:_301289600Van_Lab1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <StackPanel Margin="20" VerticalAlignment="Top">
+        <TextBlock Text="AWS S3 Bucket Manager" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
 
-    </Grid>
+        <Button Content="List Buckets" Click="ListBuckets_Click" Margin="0 5"/>
+        <Button Content="Create Bucket (Optional)" Margin="0 5"/>
+        <Button Content="Exit" Click="Exit_Click" Margin="0 5"/>
+
+        <ListBox x:Name="OutputListBox" Height="200" Margin="0 10 0 0"/>
+    </StackPanel>
 </Window>
