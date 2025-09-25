@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.S3.Util;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Amazon.S3;
-using Amazon.S3.Model;
 
 namespace _301289600Van_Lab1
 {
@@ -34,7 +35,7 @@ namespace _301289600Van_Lab1
                 .ToList();
         }
 
-
+        // create bucket
         public async Task<string> CreateBucketAsync(string bucketName)
         {
             try
@@ -58,20 +59,37 @@ namespace _301289600Van_Lab1
                 return $"General Error: {ex.Message}";
             }
         }
-
-        public async Task ListObjectsAsync(string bucketName)
+        // listing names of buckets
+        public async Task<List<S3Object>> ListObjectsAsync(string bucketName)
         {
-            var request = new ListObjectsV2Request
+            var objectList = new List<S3Object>();
+            var request = new ListObjectsV2Request { BucketName = bucketName };
+            ListObjectsV2Response response;
+            bool checkIsTruncated;
+            do
             {
-                BucketName = bucketName
-            };
-
-            var response = await s3Client.ListObjectsV2Async(request);
-            Console.WriteLine($"Objects in bucket '{bucketName}':");
-            foreach (var obj in response.S3Objects)
-            {
-                Console.WriteLine($"- {obj.Key} (Size: {obj.Size} bytes)");
+                response = await s3Client.ListObjectsV2Async(request);
+                if (response.S3Objects != null)
+                {
+                    objectList.AddRange(response.S3Objects.Select(o => new S3Object { Key = o.Key, Size = o.Size }));
+                }
+                request.ContinuationToken = response.NextContinuationToken;
+                checkIsTruncated = (bool)response.IsTruncated;
             }
+            while (checkIsTruncated);
+
+            return objectList; 
+        }
+
+        // delete objs in the bucket
+        public async Task EmptyBucketAsync(string bucketName)
+        {
+            await AmazonS3Util.DeleteS3BucketWithObjectsAsync(s3Client, bucketName);
+        }
+
+        public async Task DeleteBucketAsync(string bucketName)
+        {
+            await s3Client.DeleteBucketAsync(bucketName);
         }
     }
 }
