@@ -8,7 +8,7 @@ namespace _301289600Van_Lab1
 {
     public class S3Bucket
     {
-        public string BucketName { get; set; }
-        public DateTime CreationDate { get; set; }
+        public string? BucketName { get; set; }
+        public DateTime? CreationDate { get; set; }
     }
 }
