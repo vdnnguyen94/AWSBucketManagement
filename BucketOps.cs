@@ -25,15 +25,13 @@ namespace _301289600Van_Lab1
             s3Client = client;
         }
 
-        public async Task<List<string>> GetBucketNamesAsync()
+        public async Task<List<S3Bucket>> GetBucketsWithDatesAsync()
         {
             var response = await s3Client.ListBucketsAsync();
-            var names = new List<string>();
-            foreach (var bucket in response.Buckets)
-            {
-                names.Add(bucket.BucketName);
-            }
-            return names;
+            // This now creates a list of S3Bucket objects
+            return response.Buckets
+                .Select(b => new S3Bucket { BucketName = b.BucketName, CreationDate = b.CreationDate })
+                .ToList();
         }
 
 

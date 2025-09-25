@@ -22,18 +22,35 @@ namespace _301289600Van_Lab1
         {
             try
             {
-                OutputListBox.Items.Clear();
-                var buckets = await _bucketOps.GetBucketNamesAsync();
-                foreach (var name in buckets)
-                {
-                    OutputListBox.Items.Add(name);
-                }
+                // Get the list of S3Bucket objects
+                var buckets = await _bucketOps.GetBucketsWithDatesAsync();
+
+                // Set the DataGrid's data source directly
+                BucketDataGrid.ItemsSource = buckets;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error listing buckets: {ex.Message}");
             }
         }
+        private async void CreateBucket_Click(object sender, RoutedEventArgs e)
+        {
+            string newBucketName = $"s3demo-{Guid.NewGuid().ToString().Substring(0, 8)}";
+
+            try
+            {
+                var result = await _bucketOps.CreateBucketAsync(newBucketName);
+                MessageBox.Show($"Bucket created: {result}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Refresh the grid after creating
+                ListBuckets_Click(null, null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating bucket: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
