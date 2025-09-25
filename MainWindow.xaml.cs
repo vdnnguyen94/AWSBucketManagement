@@ -22,10 +22,10 @@ namespace _301289600Van_Lab1
         {
             try
             {
-                // Get the list of S3Bucket objects
+                // list buckets
                 var buckets = await _bucketOps.GetBucketsWithDatesAsync();
 
-                // Set the DataGrid's data source directly
+                // display name in datagrid
                 BucketDataGrid.ItemsSource = buckets;
             }
             catch (Exception ex)
@@ -35,15 +35,23 @@ namespace _301289600Van_Lab1
         }
         private async void CreateBucket_Click(object sender, RoutedEventArgs e)
         {
-            string newBucketName = $"s3demo-{Guid.NewGuid().ToString().Substring(0, 8)}";
+            // hget bucket name from textbox
+            string newBucketName = BucketNameTextBox.Text.Trim().ToLower();
+
+            // Basic validation
+            if (string.IsNullOrWhiteSpace(newBucketName))
+            {
+                MessageBox.Show("Please enter a valid bucket name.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             try
             {
                 var result = await _bucketOps.CreateBucketAsync(newBucketName);
-                MessageBox.Show($"Bucket created: {result}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Bucket '{result}' created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Refresh the grid after creating
-                ListBuckets_Click(null, null);
+                BucketNameTextBox.Clear(); // Clear the textbox 
+                ListBuckets_Click(null, null); // Refresh the grid
             }
             catch (Exception ex)
             {
