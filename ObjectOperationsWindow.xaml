@@ -1,0 +1,53 @@
+﻿<Window x:Class="_301289600Van_Lab1.ObjectOperationsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_301289600Van_Lab1"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="AWSObjectOperationsWindow" Height="600" Width="800"
+        Loaded="Window_Loaded">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="AWS Bucket:" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" Margin="0,0,10,0"/>
+            <ComboBox x:Name="BucketComboBox" MinWidth="300" SelectionChanged="BucketComboBox_SelectionChanged" Width="438"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="315*"/>
+                <ColumnDefinition Width="55*"/>
+                <ColumnDefinition Width="44*"/>
+                <ColumnDefinition Width="102*"/>
+                <ColumnDefinition Width="54*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="ObjectDataGrid" Grid.Column="0" Margin="0,0,10,25" AutoGenerateColumns="False" IsReadOnly="True" Grid.ColumnSpan="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Object Key" Binding="{Binding Key}" Width="*"/>
+                    <DataGridTextColumn Header="Size (Bytes)" Binding="{Binding Size}" Width="120"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Grid.Column="5" VerticalAlignment="Top" Height="235">
+                <TextBlock Text="File Path:" Margin="0,0,0,5"/>
+                <TextBox x:Name="FilePathTextBox" Margin="0,0,0,5" IsReadOnly="True"/>
+                <Button x:Name="BrowseButton" Content="Browse..." Margin="0,5" Height="34" Background="#FF7DCC72"/>
+                <Button x:Name="UploadButton" Content="Upload" Margin="0,5" Height="34" Background="#FF7DCC72"/>
+                <Button x:Name="DownloadButton" Content="Download" Margin="0,20,0,5" Height="34" Background="#FF7DCC72"/>
+                <Button x:Name="DeleteButton" Content="Delete" Margin="0,5" Height="34" Background="#FFD87676"/>
+            </StackPanel>
+        </Grid>
+
+        <Button x:Name="BackButton" Content="Back to Main Window" Grid.Row="1" Margin="0,492,0,0" Click="BackToMainWindow_Click" Grid.RowSpan="2" />
+    </Grid>
+</Window>
+

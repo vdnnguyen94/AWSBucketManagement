@@ -37,7 +37,9 @@ namespace _301289600Van_Lab1
         private void ObjectOperationsButton_Click(object sender, RoutedEventArgs e)
         {
             //object operation
-            MessageBox.Show("Object Level Operations will be implemented next!", "Coming Soon");
+            var objectWindow = new ObjectOperationsWindow();
+            this.Hide();
+            objectWindow.Show();
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
