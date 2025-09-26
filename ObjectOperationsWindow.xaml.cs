@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+
 
 namespace _301289600Van_Lab1
 {
@@ -20,12 +23,14 @@ namespace _301289600Van_Lab1
     public partial class ObjectOperationsWindow : Window
     {
         private readonly BucketOps _bucketOps;
+        private readonly ObjectOps _objectOps;
 
         public ObjectOperationsWindow()
         {
             InitializeComponent();
             var s3Client = Helper.s3Client;
             _bucketOps = new BucketOps(s3Client);
+            _objectOps = new ObjectOps(s3Client);
             this.Closed += ObjectOperationsWindow_Closed;
         }
         private void BackToMainWindow_Click(object sender, RoutedEventArgs e)
@@ -59,6 +64,48 @@ namespace _301289600Van_Lab1
                 MessageBox.Show($"Error listing objects: {ex.Message}", "Error");
             }
         }
+        //List items in Bucket
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                FilePathTextBox.Text = openFileDialog.FileName;
+            }
+        }
+        //Add item or upload
+        private async void UploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            // check valid
+            if (BucketComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Select a bucket first.", "Validation Error");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(FilePathTextBox.Text))
+            {
+                MessageBox.Show("Please browse for a file to upload first.", "Validation Error");
+                return;
+            }
+
+            string selectedBucket = BucketComboBox.SelectedItem.ToString();
+            string filePath = FilePathTextBox.Text;
+            try
+            {
+               
+                await _objectOps.UploadFileAsync(selectedBucket, filePath);
+                MessageBox.Show($"File '{System.IO.Path.GetFileName(filePath)}' uploaded successfully to AWS CLOUD.", "Success");
+
+                BucketComboBox_SelectionChanged(null, null);
+                FilePathTextBox.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error uploading file: {ex.Message}", "Upload Error");
+            }
+        }
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try

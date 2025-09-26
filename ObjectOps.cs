@@ -1,11 +1,12 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
 namespace _301289600Van_Lab1
 {
     public class ObjectOps
@@ -17,6 +18,7 @@ namespace _301289600Van_Lab1
             this.s3Client = s3Client;
         }
 
+        //List Objects
         public async Task<List<S3Object>> ListObjectsAsync(string bucketName)
         {
             var objectList = new List<S3Object>();
@@ -40,5 +42,15 @@ namespace _301289600Van_Lab1
             return objectList;
         }
 
+        //Upload Obj
+        public async Task UploadFileAsync(string bucketName, string filePath)
+        {
+            using (var transferUtility = new TransferUtility(s3Client))
+            {
+
+                string key = Path.GetFileName(filePath);
+                await transferUtility.UploadAsync(filePath, bucketName, key);
+            }
+        }
     }
 }
