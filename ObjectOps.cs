@@ -62,5 +62,20 @@ namespace _301289600Van_Lab1
             };
             await s3Client.DeleteObjectAsync(deleteRequest);
         }
+        //download
+        public async Task DownloadFileAsync(string bucketName, string objectKey, string savePath)
+        {
+            var downloadRequest = new TransferUtilityDownloadRequest
+            {
+                BucketName = bucketName,
+                Key = objectKey,
+                FilePath = savePath 
+            };
+
+            using (var transferUtility = new TransferUtility(s3Client))
+            {
+                await transferUtility.DownloadAsync(downloadRequest);
+            }
+        }
     }
 }

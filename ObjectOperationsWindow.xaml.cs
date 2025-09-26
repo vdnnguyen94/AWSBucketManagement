@@ -169,5 +169,38 @@ namespace _301289600Van_Lab1
                 MessageBox.Show($"Error loading buckets: {ex.Message}", "Error");
             }
         }
+
+        //download button
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+ 
+            if (ObjectDataGrid.SelectedItem is not S3Object selectedObject)
+            {
+                MessageBox.Show("Please select an object to download.", "Selection Error");
+                return;
+            }
+
+
+            var saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.FileName = selectedObject.Key;
+
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string bucketName = BucketComboBox.SelectedItem.ToString();
+                    string savePath = saveFileDialog.FileName;
+                    await _objectOps.DownloadFileAsync(bucketName, selectedObject.Key, savePath);
+
+                    MessageBox.Show($"File '{selectedObject.Key}' downloaded successfully to:\n{savePath}", "Success");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error downloading file: {ex.Message}", "Download Error");
+                }
+            }
+        }
     }
 }

@@ -42,7 +42,7 @@
                 <TextBox x:Name="FilePathTextBox" Margin="0,0,0,5" IsReadOnly="True"/>
                 <Button x:Name="BrowseButton" Content="Browse..." Margin="0,5" Height="34" Background="#FF7DCC72" Click="BrowseButton_Click"/>
                 <Button x:Name="UploadButton" Content="Upload" Margin="0,5" Height="34" Background="#FF7DCC72" Click="UploadButton_Click" />
-                <Button x:Name="DownloadButton" Content="Download" Margin="0,20,0,5" Height="34" Background="#FF7DCC72"/>
+                <Button x:Name="DownloadButton" Content="Download" Margin="0,20,0,5" Height="34" Background="#FF7DCC72" Click="DownloadButton_Click"/>
                 <Button x:Name="DeleteButton" Content="Delete" Margin="0,5" Height="34" Background="#FFD87676" Click="DeleteButton_Click"/>
             </StackPanel>
         </Grid>
