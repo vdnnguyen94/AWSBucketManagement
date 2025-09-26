@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using Amazon.S3.Model;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.IO;
 
 
 namespace _301289600Van_Lab1
@@ -74,7 +75,7 @@ namespace _301289600Van_Lab1
                 FilePathTextBox.Text = openFileDialog.FileName;
             }
         }
-        //Add item or upload
+        //Add item or upload button
         private async void UploadButton_Click(object sender, RoutedEventArgs e)
         {
             // check valid
@@ -105,6 +106,50 @@ namespace _301289600Van_Lab1
                 MessageBox.Show($"Error uploading file: {ex.Message}", "Upload Error");
             }
         }
+        // delete button
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // check item selected or not
+            if (ObjectDataGrid.SelectedItem is not S3Object selectedObject)
+            {
+                MessageBox.Show("Please select an object to delete.", "Selection Error");
+                return;
+            }
+
+            // ensure bucket is valid
+            if (BucketComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a bucket.", "Selection Error");
+                return;
+            }
+
+            // confirm
+            var confirmResult = MessageBox.Show(
+                $"Are you sure you want to delete the object '{selectedObject.Key}'?",
+                "Confirm Deletion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirmResult == MessageBoxResult.No)
+            {
+                return; 
+            }
+
+            try
+            {
+                string bucketName = BucketComboBox.SelectedItem.ToString();
+
+                await _objectOps.DeleteObjectAsync(bucketName, selectedObject.Key);
+
+                MessageBox.Show($"Object '{selectedObject.Key}' was deleted successfully.", "Success");
+
+                BucketComboBox_SelectionChanged(null, null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting object: {ex.Message}", "Delete Error");
+            }
+        }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -113,8 +158,8 @@ namespace _301289600Van_Lab1
                 // 1. Get all buckets
                 var buckets = await _bucketOps.GetBucketsWithDatesAsync();
 
-                // ✨ ADD THIS LINE FOR DEBUGGING
-                MessageBox.Show($"Found {buckets.Count} buckets.");
+                //  ADD THIS LINE FOR DEBUGGING
+            //  MessageBox.Show($"Found {buckets.Count} buckets.");
 
                 // 2. Populate the ComboBox with bucket names
                 BucketComboBox.ItemsSource = buckets.Select(b => b.BucketName);

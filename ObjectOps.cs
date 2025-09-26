@@ -52,5 +52,15 @@ namespace _301289600Van_Lab1
                 await transferUtility.UploadAsync(filePath, bucketName, key);
             }
         }
+        //detlete
+        public async Task DeleteObjectAsync(string bucketName, string objectKey)
+        {
+            var deleteRequest = new DeleteObjectRequest
+            {
+                BucketName = bucketName,
+                Key = objectKey
+            };
+            await s3Client.DeleteObjectAsync(deleteRequest);
+        }
     }
 }
