@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:_301289600Van_Lab1"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="650" Width="800">
+        Title="MainWindow" Height="700" Width="800">
     <StackPanel Margin="20" VerticalAlignment="Top">
         <TextBlock Text="AWS Bucket Management by Van Nguyen" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
 
@@ -16,22 +16,22 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Bucket Name:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox x:Name="BucketNameTextBox" Grid.Column="1" VerticalContentAlignment="Center"/>
+            <TextBlock Text="New Bucket Name:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14"/>
+            <TextBox x:Name="BucketNameTextBox" Grid.Column="1" VerticalContentAlignment="Center" Height="30"/>
         </Grid>
         
         
-        <Button Content="List Buckets" Click="ListBuckets_Click" Margin="0 5"/>
-        <Button Content="Create Bucket" Click="CreateBucket_Click" Margin="0 5"/>
-        <Button Content="Delete Selected Bucket" Click="DeleteBucket_Click" Margin="0 5"/>
-        <Button Content="Exit" Click="Exit_Click" Margin="0 5"/>
+        <Button Content="List Buckets" Click="ListBuckets_Click" Margin="0 5" Height="40" FontSize="16" Background="#FFA0BAD6"/>
+        <Button Content="Create Bucket" Click="CreateBucket_Click" Margin="0 5" Height="40" FontSize="16" Background="#FFA0BAD6"/>
+        <Button Content="Delete Selected Bucket" Click="DeleteBucket_Click" Margin="0 5" Height="40" FontSize="16" Background="#FFC35858"/>
+        <Button Content="Exit" Click="Exit_Click" Margin="0 5" Height="40" FontSize="16" Background="#FFA0BAD6"/>
 
-        <DataGrid x:Name="BucketDataGrid" Height="250" Margin="0 10 0 0" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="BucketDataGrid" Height="250" Margin="0 10 0 0" AutoGenerateColumns="False" IsReadOnly="True" FontSize="16" FontWeight="Bold">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Bucket Name" Binding="{Binding BucketName}" Width="*"/>
+                <DataGridTextColumn Header="Bucket Name" FontSize="16" Binding="{Binding BucketName}" Width="*" FontWeight="Bold"/>
                 <DataGridTextColumn Header="Creation Date" Binding="{Binding CreationDate}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Back to Main Window" Margin="0,15,0,0" Padding="5" Click="BackToMainWindow_Click"/>
+        <Button Content="Back to Main Window" Margin="0,15,0,0" Padding="5" Click="BackToMainWindow_Click" Height="40" FontSize="20"/>
     </StackPanel>
 </Window>
